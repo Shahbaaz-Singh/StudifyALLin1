@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Details - StudifyALLin1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 1000px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #343a40;
+        }
+        h3 {
+            color: #007bff;
+            margin-top: 30px;
+            font-size: 1.5rem;
+        }
+        p {
+            font-size: 1.1rem;
+        }
+        .btn-custom {
+            padding: 12px 20px;
+            font-size: 1rem;
+            margin-top: 20px;
+        }
+        .btn-group {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      <div class="alert-container mb-4">
+          {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+      </div>
+  {% endif %}
+  {% endwith %}
+    <div class="container">
+        <h2>Applicant Details</h2>
+
+        <h3>Personal Information</h3>
+        <p><strong>Applicant Id:</strong> {{ customer.id }}</p>
+        <p><strong>Name:</strong> {{ customer.name }}</p>
+        <p><strong>Date of Birth:</strong> {{ customer.dob.strftime('%B %d, %Y') }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Contact No:</strong> {{ customer.contact_no }}</p>
+        <p><strong>Address:</strong> {{ customer.address }}</p>
+        <p><strong>Marital Status:</strong> {{ customer.marital_status }}</p>
+
+        <h3>Associated Information</h3>
+        <p><strong>Employee ID:</strong> {{ customer.employee_id if customer.employee_id else 'N/A' }}</p>
+        <p><strong>Employee Name:</strong> {{ customer.employee.username if customer.employee.username else 'N/A' }}</p>
+        <p><strong>Admin ID:</strong> {{ customer.admin_id if customer.admin_id else 'N/A' }}</p>
+        <p><strong>Admin Name:</strong> {{ customer.admin.username if customer.admin.username else 'N/A' }}</p>
+
+        <h3>Exam Interests</h3>
+        <p><strong>Interested in IELTS:</strong> {{ 'Yes' if customer.interested_in_ielts else 'No' }}</p>
+        <p><strong>Interested in PTE:</strong> {{ 'Yes' if customer.interested_in_pte else 'No' }}</p>
+        <p><strong>Interested in TOEFL:</strong> {{ 'Yes' if customer.interested_in_toefl else 'No' }}</p>
+        <p><strong>Other Interest:</strong> {{ customer.interested_in_others if customer.interested_in_others else 'None' }}</p>
+
+        <h3>Visa Preferences</h3>
+        <p><strong>Study Visa:</strong> {{ 'Yes' if customer.study_visa else 'No' }}</p>
+        <p><strong>Tourist Visa:</strong> {{ 'Yes' if customer.tourist_visa else 'No' }}</p>
+        <p><strong>Permanent Residency:</strong> {{ 'Yes' if customer.pr else 'No' }}</p>
+        <p><strong>Other Visa Type:</strong> {{ customer.others_visa if customer.others_visa else 'None' }}</p>
+
+        <h3>Course Preferences</h3>
+        <p><strong>Course Preference 1:</strong> {{ customer.course_preference_1 if customer.course_preference_1 else 'None' }}</p>
+        <p><strong>Course Preference 2:</strong> {{ customer.course_preference_2 if customer.course_preference_2 else 'None' }}</p>
+        <p><strong>Course Preference 3:</strong> {{ customer.course_preference_3 if customer.course_preference_3 else 'None' }}</p>
+
+        <h3>Country Preferences</h3>
+        <p><strong>Country Preference 1:</strong> {{ customer.country_preference_1 if customer.country_preference_1 else 'None' }}</p>
+        <p><strong>Country Preference 2:</strong> {{ customer.country_preference_2 if customer.country_preference_2 else 'None' }}</p>
+        <p><strong>Country Preference 3:</strong> {{ customer.country_preference_3 if customer.country_preference_3 else 'None' }}</p>
+
+        <h3>City Preferences</h3>
+        <p><strong>City Preference 1:</strong> {{ customer.city_preference_1 if customer.city_preference_1 else 'None' }}</p>
+        <p><strong>City Preference 2:</strong> {{ customer.city_preference_2 if customer.city_preference_2 else 'None' }}</p>
+        <p><strong>City Preference 3:</strong> {{ customer.city_preference_3 if customer.city_preference_3 else 'None' }}</p>
+
+        <h3>Refusal Details</h3>
+        {% if customer.refusal_details %}
+          <ul>
+            {% for refusal in customer.refusal_details %}
+              <li>
+                <p><strong>Country:</strong> {{ refusal.country if refusal.country else 'N/A' }}</p>
+                <p><strong>Refusal Date:</strong> {{ refusal.refusal_date.strftime('%B %d, %Y') if refusal.refusal_date else 'N/A' }}</p>
+                <p><strong>Reason:</strong> {{ refusal.reason if refusal.reason else 'N/A' }}</p>
+                <p><strong>Additional Info:</strong> {{ refusal.additional_info if refusal.additional_info else 'N/A' }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No refusal details available.</p>
+        {% endif %}
+
+        <h3>Work Experience</h3>
+        {% if customer.work_experience %}
+          <ul>
+            {% for work in customer.work_experience %}
+              <li>
+                <p><strong>Organization Name:</strong> {{ work.organization_name if work.organization_name else 'N/A' }}</p>
+                <p><strong>Designation:</strong> {{ work.designation if work.designation else 'N/A' }}</p>
+                <p><strong>Joining Date:</strong> {{ work.joining_date.strftime('%B %d, %Y') if work.joining_date else 'N/A' }}</p>
+                <p><strong>Leaving Date:</strong> {{ work.leaving_date.strftime('%B %d, %Y') if work.leaving_date else 'N/A' }}</p>
+                <p><strong>Full/Part Time:</strong> {{ work.full_time_part_time if work.full_time_part_time else 'N/A' }}</p>
+                <p><strong>Job Duties:</strong> {{ work.job_duties if work.job_duties else 'N/A' }}</p>
+                <p><strong>Was it your business?</strong> {{  work.was_it_your_business if work.was_it_your_business else 'N/A' }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No work experience available.</p>
+        {% endif %}
+
+        <h3>Travel History</h3>
+        {% if customer.travel_history %}
+          <ul>
+            {% for travel in customer.travel_history %}
+              <li>
+                <p><strong>Country:</strong> {{ travel.country if travel.country else 'N/A' }}</p>
+                <p><strong>Arrival Date:</strong> {{ travel.arrival_date.strftime('%B %d, %Y') if travel.arrival_date else 'N/A' }}</p>
+                <p><strong>Departure Date:</strong> {{ travel.departure_date.strftime('%B %d, %Y') if travel.departure_date else 'N/A' }}</p>
+                <p><strong>Details:</strong> {{ travel.details if travel.details else 'N/A' }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No travel history available.</p>
+        {% endif %}
+
+        <h3>Education</h3>
+        {% if customer.education %}
+          <ul>
+            {% for education in customer.education %}
+              <li>
+                <p><strong>Class/Grade:</strong> {{ education.class_name if education.class_name else 'N/A' }}</p>
+                <p><strong>Pass Out Year:</strong> {{ education.pass_out_year if education.pass_out_year else 'N/A' }}</p>
+                <p><strong>Board/University/College:</strong> {{ education.board_university_college if education.board_university_college else 'N/A' }}</p>
+                <p><strong>Percentage or Grade Point:</strong> {{ education.percentage_or_grade_point if education.percentage_or_grade_point else 'N/A' }}</p>
+                <p><strong>Stream/Subjects:</strong> {{ education.stream_subjects if education.stream_subjects else 'N/A' }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No education history available.</p>
+        {% endif %}
+
+        <h3>Additional Information</h3>
+        <p>{{ customer.other_information if customer.other_information else 'N/A' }}</p>
+
+        <h3>Signature and Source Information</h3>
+        <p><strong>Signed on:</strong> {{ customer.sign_date.strftime('%B %d, %Y') }}</p>
+        <p><strong>Source:</strong> {{ customer.how_did_you_know_us if customer.how_did_you_know_us else 'N/A' }}</p>
+
+        <div class="btn-group">
+            <a href="{{ url_for('update_customer_admin', customer_id=customer.id) }}" class="btn btn-warning btn-custom">Update Details</a>
+            <a href="{{ url_for('download_word', customer_id=customer.id) }}" class="btn btn-primary btn-custom">Download as Word</a>
+            <a href="{{ url_for('download_pdf', customer_id=customer.id) }}" class="btn btn-success btn-custom">Download as PDF</a>
+        </div>
+
+    </div>
+    <div class="mt-3 text-center">
+      <a href="{{ url_for('view_customers_admin') }}" class="text-decoration-none">Go Back</a>
+  </div>
+    <div class="mt-3 text-center">
+      <a href="{{ url_for('admin_dashboard') }}" class="text-decoration-none">Back to dashboard</a>
+  </div>
+  <div class="mt-3 text-center">
+      <a href="{{ url_for('admin_logout') }}" class="text-decoration-none">Logout</a>
+  </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
